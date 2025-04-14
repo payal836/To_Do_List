@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Project-Worthy To-Do List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #e0eafc, #cfdef3);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-top: 30px;
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            margin-top: 20px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .container input[type="text"],
+        .container select,
+        .container button {
+            padding: 10px;
+            margin: 10px 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .container input[type="text"] {
+            width: 60%;
+        }
+
+        .container button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .container button:hover {
+            background-color: #0056b3;
+        }
+
+        .container2 {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .priority-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            width: 280px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            margin: 0 0 10px;
+            color: #444;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 6px 0;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .ht li { background-color: #ffe6e6; }
+        .mt li { background-color: #fff9cc; }
+        .lt li { background-color: #e6ffe6; }
+
+        .completed {
+            background-color: #dcdcdc !important;
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        #ct {
+            max-width: 600px;
+            width: 90%;
+            margin-bottom: 50px;
+        }
+
+        #ct h3 {
+            margin-top: 0;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive To-Do List</h1>
+
+    <div class="container">
+        <label for="task"><strong>Task</strong></label><br />
+        <input type="text" id="task" placeholder="Please enter your task">
+        <select id="priority">
+            <option value="">Select Priority</option>
+            <option value="high">High</option>
+            <option value="med">Medium</option>
+            <option value="low">Low</option>
+        </select>
+        <button onclick="addtask()">Add Task</button>
+    </div>
+
+    <div class="container2">
+        <div class="priority-box">
+            <h3>High Priority</h3>
+            <ul id="ht" class="ht"></ul>
+        </div>
+        <div class="priority-box">
+            <h3>Medium Priority</h3>
+            <ul id="mt" class="mt"></ul>
+        </div>
+        <div class="priority-box">
+            <h3>Low Priority</h3>
+            <ul id="lt" class="lt"></ul>
+        </div>
+    </div>
+
+    <div id="ct" class="priority-box">
+        <h3>Completed Tasks</h3>
+        <ul class="ct"></ul>
+    </div>
+
+    <footer>© 2025 To-Do List App</footer>
+
+    <script>
+        function addtask() {
+            const taskValue = document.getElementById("task").value.trim();
+            const priority = document.getElementById("priority").value;
+
+            if (!taskValue) {
+                alert("Please enter a task!");
+                return;
+            }
+
+            if (!priority) {
+                alert("Please select a priority!");
+                return;
+            }
+
+            const item = document.createElement("li");
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.onchange = function () {
+                if (this.checked) {
+                    markascompleted(item);
+                }
+            };
+
+            const taskLabel = document.createElement("span");
+            taskLabel.textContent = taskValue;
+
+            item.appendChild(taskLabel);
+            item.appendChild(checkbox);
+
+            const targetList = {
+                high: document.getElementById("ht"),
+                med: document.getElementById("mt"),
+                low: document.getElementById("lt")
+            }[priority];
+
+            targetList.appendChild(item);
+
+            document.getElementById("task").value = "";
+            document.getElementById("priority").value = "";
+        }
+
+        function markascompleted(task) {
+            task.classList.add("completed");
+            task.querySelector("input[type='checkbox']").remove();
+            document.querySelector("#ct ul").appendChild(task);
+        }
+    </script>
+</body>
+</html>
